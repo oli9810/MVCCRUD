@@ -1,0 +1,41 @@
+using Microsoft.Extensions.Configuration;
+using MVCCRUD.Models;
+using Microsoft.EntityFrameworkCore;
+
+/// <summary>
+/// Nombre de la aplicacio?n: MVCCRUD(Crud Modelo Vista Controlador)
+/// Nombre del desarrollador:Oliver Moriset Rojas- Omar Barea Lima
+/// Fecha de creacio?n: 12/02/2023
+/// </summary>
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<MVCCRUDContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("conexion")));
+
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.Run();
